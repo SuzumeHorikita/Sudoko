@@ -1,0 +1,25 @@
+# Object/Binary/Library files
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+
+# Executables/Debug/Build
+*.exe
+*.out
+*.app
+*.dSYM/
+*.pdb
+*.ilk
+*.su
+*.gch
+*.pch
+*.d
+
+# Build System Specific
+build/
+*.tmp
