@@ -8,24 +8,11 @@ int numbers[9] = {
 int numbers_of_elements = sizeof(numbers) / sizeof(numbers[0]);
 
 int *rand_list();
+void sudoku_gen(int *a);
 
 int main(void) 
 {
-    int *list1 = rand_list();
-    int *list2 = rand_list();
-
-// -------------------------------------------------------
-    for (int i = 0; i < numbers_of_elements; i++) 
-    {
-        printf(" %d ", list1[i]);
-    }
-    printf("\n");
-    for (int i = 0; i < numbers_of_elements; i++) 
-    {
-        printf(" %d ", list2[i]);
-    }
-    printf("\n");
-// -----------------------------------------------------------
+    sudoku_gen(rand_list());
 }
 
 int *rand_list()
@@ -109,4 +96,23 @@ int *rand_list()
     }
 
     return rand_num;
+}
+
+void sudoku_gen(int *a) 
+{
+    int sudoko_box[9][9] = {0};
+    
+    for (int i = 0; i < numbers_of_elements; i++) {
+        sudoko_box[0][i] = a[i];
+    }
+
+// -------------------------------------------------------------
+    for (int i = 0; i < numbers_of_elements; i++) {
+        for (int j  = 0; j < numbers_of_elements; j++) {
+            printf(" %d ", sudoko_box[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+// ---------------------------------------------------------------
 }
