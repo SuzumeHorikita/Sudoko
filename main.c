@@ -9,6 +9,7 @@ int numbers_of_elements = sizeof(numbers) / sizeof(numbers[0]);
 
 int *rand_list();
 void sudoku_gen(int *a);
+int wrap(int index);
 
 int main(void) 
 {
@@ -100,19 +101,41 @@ int *rand_list()
 
 void sudoku_gen(int *a) 
 {
-    int sudoko_box[9][9] = {0};
-    
-    for (int i = 0; i < numbers_of_elements; i++) {
-        sudoko_box[0][i] = a[i];
+    int sudo_box[9][9] = {0};    
+
+    for (int i = 0; i < numbers_of_elements; i++)
+    {
+        sudo_box[0][i] = a[i];
     }
 
+    int *list1 = rand_list();
+    for (int i = 0; i < numbers_of_elements; i++) {
+        if (sudo_box[0][i] == list1[i]) {
+            
+            int index = i + 3;
+            if (index >= 9) index = wrap(index);
+            int temp = list1[index];
+            sudo_box[1][i] = temp;
+            list1[index] = list1[i];
+            list1[i] = temp;
+            
+        } else {
+            sudo_box[1][i] = list1[i];
+        }
+    }
+    
 // -------------------------------------------------------------
     for (int i = 0; i < numbers_of_elements; i++) {
         for (int j  = 0; j < numbers_of_elements; j++) {
-            printf(" %d ", sudoko_box[i][j]);
+            printf(" %d ", sudo_box[i][j]);
         }
         printf("\n");
     }
     printf("\n");
 // ---------------------------------------------------------------
+
+}
+
+int wrap(int index) {
+    return index -= 9;
 }
