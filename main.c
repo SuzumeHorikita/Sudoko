@@ -41,28 +41,7 @@ void sudo_gen(int *arr) {
 
     // list of 9 pointers -> function -> array
     int* (*list[9])();
-    
-    again:
-    for (int i = 0; i < elements; i++) {
-        list[i] = random_numbers;
-    }
-
-    for (int i = 0; i < elements; i++) {
-        int* var = list[i]();
-        if (arr[i] != *(var + i) ) {
-            goto again;
-        }
-    }
-
-    for (int i = 0; i < elements; i++) {
-        for (int j = 0; j < elements; j++) {
-            int *var = list[i]();
-            grid[i][j] = var[j];
-        }
-    }
-    
-     
-
+        
 //----------------------------------------------------
     for (int i = 0; i < elements; i++) {
         for (int j = 0; j < elements; j++) {
