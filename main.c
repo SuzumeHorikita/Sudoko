@@ -10,10 +10,11 @@ int numbers[9] = {
 
 const unsigned int elements = sizeof(numbers) / sizeof(numbers[0]); 
 
-int* random_numbers(); 
+int* random_numbers();
+void sudo_gen(int *arr);
 
 int main(void) {
-    int *numbers = random_numbers();
+    sudo_gen(random_numbers());
     
 }
 
@@ -29,4 +30,46 @@ int* random_numbers() {
     }
 
     return numbers; 
+}
+
+void sudo_gen(int *arr) {
+    int grid[9][9] = {0};
+
+    for (int i = 0; i < elements; i++) {
+        grid[0][i] = arr[i];
+    }
+
+    // list of 9 pointers -> function -> array
+    int* (*list[9])();
+    
+    again:
+    for (int i = 0; i < elements; i++) {
+        list[i] = random_numbers;
+    }
+
+    for (int i = 0; i < elements; i++) {
+        int* var = list[i]();
+        if (arr[i] != *(var + i) ) {
+            goto again;
+        }
+    }
+
+    for (int i = 0; i < elements; i++) {
+        for (int j = 0; j < elements; j++) {
+            int *var = list[i]();
+            grid[i][j] = var[j];
+        }
+    }
+    
+     
+
+//----------------------------------------------------
+    for (int i = 0; i < elements; i++) {
+        for (int j = 0; j < elements; j++) {
+            printf(" %d ", grid[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+//-----------------------------------------------------
 }
