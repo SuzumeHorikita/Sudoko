@@ -9,15 +9,16 @@ int numbers[9] = {
 };
 int grid[9][9] = {0};
 
-void random_numbers();
+void random_numbers_firstrow();
 void solver();
 
 int main(void) {
+    random_numbers_firstrow();
     solver();
     return 0;
 }
 
-void random_numbers() {
+void random_numbers_firstrow() {
     srand(time(NULL));
 
     for (int i = 0; i < MAX_NUMS; i++) {
@@ -26,15 +27,13 @@ void random_numbers() {
         numbers[i] = numbers[index];
         numbers[index] = temp;
     }
-}
 
-void solver() {
-    
-    random_numbers();
     for (int i = 0; i < MAX_NUMS; i++) {
         grid[0][i] = numbers[i];
     }
+}
 
+void solver() {
     for (int i = 0; i < MAX_NUMS; i++) {
         for (int j = 0; j < MAX_NUMS; j++) {
             printf(" %d ", grid[i][j]);
