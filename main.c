@@ -61,10 +61,12 @@ void solver() {
 }
 
 bool check_row(int a_num) {
+    // check the cloumn
     return true;
 }
 
 bool check_column(int a_num) {
+    // check the row
     return true;
 }
 bool check_3x3_grid(int a_num) {
