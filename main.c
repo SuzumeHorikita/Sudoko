@@ -68,5 +68,6 @@ bool check_column(int a_num) {
     return true;
 }
 bool check_3x3_grid(int a_num) {
+
     return true;
 }
