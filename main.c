@@ -14,7 +14,7 @@ void random_numbers_firstrow();
 void solver();
 bool check_row(int a_num, int row_index);
 bool check_column(int a_num, int column_index);
-bool check_3x3_grid(int a_num);
+bool check_3x3_grid(int a_num, int row_index, int column_index);
 
 int main(void) {
     random_numbers_firstrow();
@@ -47,11 +47,13 @@ void solver() {
     // Check the row
     int row = 0;
     check_row(num[rand_index], row); // row should be constant because column changes
-    // Check the 3 X 3 Board
-    check_3x3_grid(num[rand_index]);
+    
     // Check the column
     int column = 0;
-    check_column(num[rand_index], column);   
+    check_column(num[rand_index], column);
+    
+    // Check the 3 X 3 Board
+    check_3x3_grid(num[rand_index], row, column);
     
     for (int i = 0; i < MAX_NUMS; i++) {
         for (int j = 0; j < MAX_NUMS; j++) {
@@ -79,7 +81,16 @@ bool check_column(int a_num, int column) {
     }
     return true;
 }
-bool check_3x3_grid(int a_num) {
+bool check_3x3_grid(int a_num, int row, int column) { 
+    int start_row = (int) (row / 3) * 3;
+    int start_column = (int) (column / 3) * 3;
 
+    for (int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            if (grid[i + start_row][j + start_column] == a_num) {
+                return false;
+            }
+        }
+    }
     return true;
 }
