@@ -42,18 +42,22 @@ void solver() {
     int num[9] = {
         1,2,3,4,5,6,7,8,9
     };
-    int rand_index = (int) rand() % 9;
+    
+    for (int i = 1; i < MAX_NUMS; i++) { // why use i = 1 because in grid[0][0..8] is all read filled
+        for (int j = 0; j < MAX_NUMS; j++) {
+            int row = i; // just for simplicity
+            int column = j; // just for simplicity
 
-    // Check the row
-    int row = 0;
-    check_row(num[rand_index], row); // row should be constant because column changes
-    
-    // Check the column
-    int column = 0;
-    check_column(num[rand_index], column);
-    
-    // Check the 3 X 3 Board
-    check_3x3_grid(num[rand_index], row, column);
+            int rand_index = (int) rand() % 9;
+            
+            if (check_row(num[rand_index], row) == true && check_column(num[rand_index], column) == true && check_3x3_grid(num[rand_index], row, column)) {
+                grid[row][column] = num[rand_index];
+            }
+            else {
+                
+            }
+        }
+    }
     
     for (int i = 0; i < MAX_NUMS; i++) {
         for (int j = 0; j < MAX_NUMS; j++) {
