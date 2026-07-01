@@ -15,6 +15,7 @@ void solver();
 bool check_row(int a_num, int row_index);
 bool check_column(int a_num, int column_index);
 bool check_3x3_grid(int a_num, int row_index, int column_index);
+void other_option(int a_num, int row, int column);
 
 int main(void) {
     random_numbers_firstrow();
@@ -50,14 +51,25 @@ void solver() {
 
             int rand_index = (int) rand() % 9;
             
-            if (check_row(num[rand_index], row) == true && check_column(num[rand_index], column) == true && check_3x3_grid(num[rand_index], row, column)) {
+            if (check_row(num[rand_index], row) == true && check_column(num[rand_index], column) == true && check_3x3_grid(num[rand_index], row, column) == true) {
                 grid[row][column] = num[rand_index];
             }
             else {
-                
+                other_option(num[rand_index], row, column);
             }
         }
     }
+
+ /*
+    This line cause segmentation fault
+    for (int i = 0; i < MAX_NUMS; i++) {
+        for (int j = 0; j < MAX_NUMS; j++) {
+            if (grid[i][j] != 0) {
+                solver();
+            }
+        }
+    }
+*/
     
     for (int i = 0; i < MAX_NUMS; i++) {
         for (int j = 0; j < MAX_NUMS; j++) {
@@ -98,3 +110,19 @@ bool check_3x3_grid(int a_num, int row, int column) {
     }
     return true;
 }
+
+
+void other_option(int a_num, int row, int column) {
+    for (int i = 0; i < MAX_NUMS; i++) {
+        if (numbers[i] == a_num) {
+            continue;
+        }
+        else if (check_row(numbers[i], row) == true && check_column(numbers[i], column) == true && check_3x3_grid(numbers[i], row, column) == true) {
+            grid[row][column] = numbers[i];
+        }
+    }
+}
+// in this code there is a flow that we put the number and never check
+// that this number is valid in future because the reason is this the number
+// we put had a problem ultimetly there is a point where there is no number valid
+// so the result there is some places zero are there
