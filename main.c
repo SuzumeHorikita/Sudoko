@@ -16,6 +16,7 @@ bool check_row(int a_num, int row_index);
 bool check_column(int a_num, int column_index);
 bool check_3x3_grid(int a_num, int row_index, int column_index);
 void other_option(int a_num, int row, int column);
+void backup_option(); // i dont know what the hell i am doing
 
 int main(void) {
     random_numbers_firstrow();
@@ -60,11 +61,11 @@ void solver() {
         }
     }
 
- /*
-    This line cause segmentation fault
+    backup_option();
+ /*   produce segmentation fault
     for (int i = 0; i < MAX_NUMS; i++) {
         for (int j = 0; j < MAX_NUMS; j++) {
-            if (grid[i][j] != 0) {
+            if (grid[i][j] == 0) {
                 solver();
             }
         }
@@ -119,6 +120,7 @@ void other_option(int a_num, int row, int column) {
         }
         else if (check_row(numbers[i], row) == true && check_column(numbers[i], column) == true && check_3x3_grid(numbers[i], row, column) == true) {
             grid[row][column] = numbers[i];
+            break;
         }
     }
 }
@@ -126,3 +128,25 @@ void other_option(int a_num, int row, int column) {
 // that this number is valid in future because the reason is this the number
 // we put had a problem ultimetly there is a point where there is no number valid
 // so the result there is some places zero are there
+void backup_option() {
+    for (int i = 0; i < MAX_NUMS; i++) {
+        for (int j = 0; j < MAX_NUMS; j++) {
+            if (grid[i][j] == 0) {
+                j -= 1;
+                if (j < 0) {
+                    i -= 1;
+                    j = 8;
+                    if (i == 0) {
+                        backup_option();
+                    }
+                }
+                int a_num = grid[i][j];
+                other_option(a_num, i, j);
+                backup_option();
+            }
+            else {
+                break;
+            }
+        }
+    }
+}
