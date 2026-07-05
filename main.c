@@ -1,9 +1,11 @@
 #include <linux/limits.h>
+#include "raylib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
 
+// gcc main.c -o game -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 const int MAX_NUMS = 9;
 int numbers[9] = {
@@ -18,12 +20,26 @@ bool check_column(int a_num, int column_index);
 bool check_3x3_grid(int a_num, int row_index, int column_index);
 
 int main(void) {
+
+    const int screenWidth = 800;
+    const int screenHight = 450;
+
+    InitWindow(screenWidth, screenHight, "Sudoko");
+
+    SetTargetFPS(60);
+    
     random_numbers_firstrow();
-    if (solver(1,0) == true)
-        printf("It generated\n");
-    else
-         printf("It failed\n");
-         
+
+    while (!WindowShouldClose()) {
+        BeginDrawing();
+            ClearBackground(RAYWHITE);
+            if (solver(1,0) == true)
+                DrawText("It generated", 190, 200, 20, BLACK);
+            else
+                DrawText("It failed", 190, 200, 20, BLACK);
+        EndDrawing();
+    }
+    CloseWindow();
     return 0;
 }
 
