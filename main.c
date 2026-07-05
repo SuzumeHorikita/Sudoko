@@ -1,8 +1,14 @@
 #include <linux/limits.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+
+struct Node {
+    int num;
+    struct Node *next;
+};
 
 const int MAX_NUMS = 9;
 int numbers[9] = {
@@ -40,6 +46,9 @@ void random_numbers_firstrow() {
 }
 
 void solver() {
+    struct Node *head = NULL;
+    struct Node *tail = NULL;
+    
     srand(time(NULL));
     int num[9] = {
         1,2,3,4,5,6,7,8,9
@@ -60,17 +69,48 @@ void solver() {
             }
         }
     }
-
-    backup_option();
- /*   produce segmentation fault
-    for (int i = 0; i < MAX_NUMS; i++) {
-        for (int j = 0; j < MAX_NUMS; j++) {
-            if (grid[i][j] == 0) {
-                solver();
+// How it works
+// it first check if she find 0
+// if yes subtract 1 in column and if column < 0
+// then simpily subtract 1 in row and set column = 8 back
+// and she assign to node->num = grid[i][j] which is a linked list
+// it she pass it to other_options
+// she she add a another number to node 
+// while (true) {
+    struct Node *node = malloc(sizeof(*node));
+    int count = 0;
+        for (int i = 0; i < MAX_NUMS; i++) {
+            for (int j = 0; j < MAX_NUMS; j++) {
+                if (grid[i][j] == 0) {
+                      j -= 1;
+                      if (j < 0) {
+                          i -= 1;
+                          j = 8;
+                      }
+                        
+                      if(node == NULL) {
+                          printf("Memory full\n");
+                          return;
+                      }
+                      node->next = NULL;
+                      update:
+                      node->num = grid[i][j];
+                      if (head == NULL) {
+                          head = node;
+                          tail = node;
+                      } else {
+                          tail->next = node;
+                          tail = node;
+                      }
+                      other_option(grid[i][j], i, j);
+                      for (int k = 1; k < MAX_NUMS; k++) {
+                          count += 1;
+                          goto update;
+                      }
+                }
             }
         }
-    }
-*/
+//    }
     
     for (int i = 0; i < MAX_NUMS; i++) {
         for (int j = 0; j < MAX_NUMS; j++) {
