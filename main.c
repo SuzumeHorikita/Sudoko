@@ -6,6 +6,11 @@
 #include <stdbool.h>
 
 // gcc main.c -o game -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+// maximum blanks 64 to min blanks 41
+ struct Node_nums {
+     int number;
+     struct Node *next;
+ };
 
 const int MAX_NUMS = 9;
 int numbers[9] = {
@@ -18,6 +23,7 @@ bool solver(int row, int column);
 bool check_row(int a_num, int row_index);
 bool check_column(int a_num, int column_index);
 bool check_3x3_grid(int a_num, int row_index, int column_index);
+void create_blanks(); // create the blanks boxes
 
 int main(void) {
 
@@ -29,14 +35,17 @@ int main(void) {
     SetTargetFPS(60);
     
     random_numbers_firstrow();
+    bool isBoardGenerated = solver(1,0);
 
     while (!WindowShouldClose()) {
         BeginDrawing();
             ClearBackground(RAYWHITE);
-            if (solver(1,0) == true)
+            if (isBoardGenerated) {
                 DrawText("It generated", 190, 200, 20, BLACK);
-            else
+            }
+            else {
                 DrawText("It failed", 190, 200, 20, BLACK);
+            }
         EndDrawing();
     }
     CloseWindow();
@@ -115,4 +124,9 @@ bool check_3x3_grid(int a_num, int row, int column) {
         }
     }
     return true;
+}
+
+void create_blanks() {
+    struct Node_nums *head = NULL;
+    struct Node_nums *tail = NULL;
 }
