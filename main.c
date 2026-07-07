@@ -1,5 +1,5 @@
 #include <linux/limits.h>
-#include "raylib.h"
+// #include "raylib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -7,7 +7,7 @@
 
 // gcc main.c -o game -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 // maximum blanks 64 to min blanks 41
- struct Node_nums {
+ struct Node {
      int number;
      struct Node *next;
  };
@@ -26,7 +26,7 @@ bool check_3x3_grid(int a_num, int row_index, int column_index);
 void create_blanks(); // create the blanks boxes
 
 int main(void) {
-
+/*
     const int screenWidth = 800;
     const int screenHight = 450;
 
@@ -49,6 +49,15 @@ int main(void) {
         EndDrawing();
     }
     CloseWindow();
+*/
+
+    random_numbers_firstrow();
+    if (solver(1, 0) == true) {
+        printf("it generated\n");
+    } else {
+        printf("It failed");    
+    }
+    create_blanks();
     return 0;
 }
 
@@ -125,8 +134,45 @@ bool check_3x3_grid(int a_num, int row, int column) {
     }
     return true;
 }
+// create_blanks() works like this
+// first it create a linked list and asign the numbers to it from the grid[i][j]
+// then me are removing the numbers from the grid[i][j];
+void create_blanks() { 
+    struct Node *head = NULL;
+    struct Node *tail = NULL;
 
-void create_blanks() {
-    struct Node_nums *head = NULL;
-    struct Node_nums *tail = NULL;
+    for (int i = 0; i < MAX_NUMS; i++) {
+        for (int j = 0; j < MAX_NUMS; j++) {
+            struct Node *node = malloc(sizeof(*node));
+            if (node == NULL) {
+                printf("memory err\n");
+                return;
+            }
+            node->next = NULL;
+            node->number = grid[i][j];
+            if (head == NULL) {
+                head = node;
+                tail = node;
+            } else {
+                tail->next = node;
+                tail = node;
+            }
+        }
+    }
+    // Just to print 
+    while (head != NULL) {
+        printf(" %d" , head->number);
+        head = head->next;
+    }
+    printf("\n");
+
+    // removing the numbers from grid
+    srand(time(NULL));
+    int max = 65;
+    int min = 41;
+    int rand_blank = rand() % (max - min) + min;
+
+    printf("%d \n", rand_blank);
+    
 }
+// Note: remember to free the list also 
