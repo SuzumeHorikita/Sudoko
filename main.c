@@ -83,12 +83,14 @@ bool solver(int row, int column) {
     }
 
     if(row == 9) {
+        // --------------------------------------------------------- down
         for (int i = 0; i < MAX_NUMS; i++) {
             for (int j = 0; j < MAX_NUMS; j++) {
                 printf(" %d ", grid[i][j]);
             }
             printf("\n");
         }
+        // ----------------------------------------------------------- up
         return true;
     }
 
@@ -159,12 +161,13 @@ void create_blanks() {
             }
         }
     }
-    // Just to print 
+    // ----------------------------------------------- down
     while (head != NULL) {
         printf(" %d" , head->number);
         head = head->next;
     }
     printf("\n");
+    // --------------------------------------------------- up
 
     // removing the numbers from grid
     srand(time(NULL));
@@ -172,7 +175,18 @@ void create_blanks() {
     int min = 41;
     int rand_blank = rand() % (max - min) + min;
 
+    // --------------------------------------- down
     printf("%d \n", rand_blank);
-    
+    // -------------------------------------------- up
+
+    int *flat_grid = (int *) grid; // acess grid as a flat 1d array
+       // ----------------------------------------------- down
+    for (int i = 0; i < MAX_NUMS; i++) {
+            for (int j = 0; j < MAX_NUMS; j++) {
+                printf(" %d ", grid[i][j]);
+            }
+            printf("\n");
+        }
+    // --------------------------------------------------- up
 }
 // Note: remember to free the list also 
