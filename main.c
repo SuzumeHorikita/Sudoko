@@ -205,10 +205,25 @@ void create_blanks() {
 // Note: remember to free the list also
 bool isIndexValid(int index,struct Node **temp_head_zero, struct Node **temp_tail_zero) {
     struct Node *node = malloc(sizeof(*node));
+    // making a deep copy of head ------------------------------------------??
+    struct Node *new_head = malloc(sizeof(struct Node));
+    if (new_head != NULL) {
+        new_head->number = (*temp_head_zero)->number;
+        new_head->next = (*temp_head_zero)->next;
+    }
+    // ---------------------------------------------------------------------??
     node->number = index;
     node->next = NULL;
     if (temp_head_zero == NULL) {
         *temp_head_zero = node;
+        *temp_tail_zero = node;
         return true;
-    } else if 
+    } else {
+        while (new_head != NULL){
+            if (new_head->number == index)
+                return false;
+            new_head = new_head->next;
+        }
+        return true;
+    }
 }
