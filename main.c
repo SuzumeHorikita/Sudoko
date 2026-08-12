@@ -24,7 +24,6 @@ bool check_row(int a_num, int row_index);
 bool check_column(int a_num, int column_index);
 bool check_3x3_grid(int a_num, int row_index, int column_index);
 void create_blanks(); // create the blanks boxes
-bool isIndexValid(int index, struct Node **temp_head, struct Node **temp_tail); // just to check that the given index is valid or not if valid assign 0 if not you know it
 
 int main(void) {
 /*
@@ -181,18 +180,6 @@ void create_blanks() {
     // -------------------------------------------- up
 
     int *flat_grid = (int *) grid; // acess grid as a flat 1d array
-
-    struct Node *temp_head_zero = NULL;
-    struct Node *temp_tail_zero = NULL;
-    for (int i = 0; i < rand_blank; i++) {
-        int index = rand() % rand_blank;
-        if (isIndexValid(index,&temp_head_zero, &temp_tail_zero) == true){
-            flat_grid[index] = 0;
-        } else {
-            
-        }
-    }
-    
        // ----------------------------------------------- down
     for (int i = 0; i < MAX_NUMS; i++) {
             for (int j = 0; j < MAX_NUMS; j++) {
@@ -203,27 +190,3 @@ void create_blanks() {
     // --------------------------------------------------- up
 }
 // Note: remember to free the list also
-bool isIndexValid(int index,struct Node **temp_head_zero, struct Node **temp_tail_zero) {
-    struct Node *node = malloc(sizeof(*node));
-    // making a deep copy of head ------------------------------------------??
-    struct Node *new_head = malloc(sizeof(struct Node));
-    if (new_head != NULL) {
-        new_head->number = (*temp_head_zero)->number;
-        new_head->next = (*temp_head_zero)->next;
-    }
-    // ---------------------------------------------------------------------??
-    node->number = index;
-    node->next = NULL;
-    if (temp_head_zero == NULL) {
-        *temp_head_zero = node;
-        *temp_tail_zero = node;
-        return true;
-    } else {
-        while (new_head != NULL){
-            if (new_head->number == index)
-                return false;
-            new_head = new_head->next;
-        }
-        return true;
-    }
-}
