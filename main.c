@@ -6,7 +6,6 @@
 #include <stdbool.h>
 
 // gcc main.c -o game -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
-// maximum blanks 64 to min blanks 41
  struct Node {
      int number;
      struct Node *next;
@@ -82,17 +81,8 @@ bool solver(int row, int column) {
         column = 0;
     }
 
-    if(row == 9) {
-        // --------------------------------------------------------- down
-        for (int i = 0; i < MAX_NUMS; i++) {
-            for (int j = 0; j < MAX_NUMS; j++) {
-                printf(" %d ", grid[i][j]);
-            }
-            printf("\n");
-        }
-        // ----------------------------------------------------------- up
+    if(row == 9) 
         return true;
-    }
 
     for (int num = 1; num <= 9 ; num++) {
         if (check_row(num, row) && check_column(num, column) && check_3x3_grid(num, row, column)) {
@@ -106,7 +96,7 @@ bool solver(int row, int column) {
     return false;
 }
 
-bool check_row(int a_num, int row) { // because column changes not the row
+bool check_row(int a_num, int row) {
     for (int i = 0; i < MAX_NUMS; i++) {
         if (grid[row][i] == a_num) {
             return false;
@@ -123,6 +113,7 @@ bool check_column(int a_num, int column) {
     }
     return true;
 }
+
 bool check_3x3_grid(int a_num, int row, int column) { 
     int start_row = (int) (row / 3) * 3;
     int start_column = (int) (column / 3) * 3;
@@ -136,10 +127,9 @@ bool check_3x3_grid(int a_num, int row, int column) {
     }
     return true;
 }
-// create_blanks() works like this
-// first it create a linked list and asign the numbers to it from the grid[i][j]
-// then me are removing the numbers from the grid[i][j];
-void create_blanks() { 
+
+void create_blanks() {
+    // making a linked list to store the grid[i][j] 
     struct Node *head = NULL;
     struct Node *tail = NULL;
 
@@ -161,32 +151,31 @@ void create_blanks() {
             }
         }
     }
-    // ----------------------------------------------- down
-    while (head != NULL) {
-        printf(" %d" , head->number);
-        head = head->next;
-    }
-    printf("\n");
-    // --------------------------------------------------- up
-
-    // removing the numbers from grid
+    
+    // removing the random numbers from grid
     srand(time(NULL));
     int max = 65;
     int min = 41;
     int rand_blank = rand() % (max - min) + min;
 
-    // --------------------------------------- down
-    printf("%d \n", rand_blank);
-    // -------------------------------------------- up
-
     int *flat_grid = (int *) grid; // acess grid as a flat 1d array
-       // ----------------------------------------------- down
-    for (int i = 0; i < MAX_NUMS; i++) {
-            for (int j = 0; j < MAX_NUMS; j++) {
-                printf(" %d ", grid[i][j]);
-            }
-            printf("\n");
+
+    int *pool = calloc(81, sizeof(int));
+    for (int i = 0; i < 81;i++)
+        pool[i] = i;
+    
+    for (int i = 0; i < rand_blank; i++) {
+        int index = rand() % 81;
+        if (pool[index] == -1)
+            i -= 1;
+        else {
+            flat_grid[index] = 0;
+            pool[index] = -1;
         }
-    // --------------------------------------------------- up
+    }
+
+    // freeing the pool
+    free(pool);
+    pool = NULL; 
 }
 // Note: remember to free the list also
