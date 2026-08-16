@@ -13,6 +13,12 @@
      struct Node *next;
  };
 
+ struct CopyBlank {
+     short i;
+     short j;
+     struct CopyBlank *next;
+ };
+
 const unsigned int MAX_NUMS = 9;
 const unsigned int TITLE_SIZE = 45; 
 
@@ -27,6 +33,8 @@ bool check_row(int a_num, int row_index);
 bool check_column(int a_num, int column_index);
 bool check_3x3_grid(int a_num, int row_index, int column_index);
 void create_blanks(); // create the blanks boxes
+void fill_blank(int row, int col, int keypressed);
+void create_copy_of_blank(); 
 
 int main(void) {
     
@@ -51,10 +59,11 @@ int main(void) {
         lightLime, WHITE, lightLime, WHITE, lightLime, WHITE, lightLime, WHITE, lightLime 
     };
     
-    // Generate of board
+    // Generate of board and make a copy of it
     random_numbers_firstrow();
     bool isBoardGenerated = solver(1,0);
     create_blanks();
+    create_copy_of_blank();
 
     // ---------------------------------------------------------------------------
     // Cheat code
@@ -68,8 +77,32 @@ int main(void) {
     // ----------------------------------------------------------------------------
 
     while (!WindowShouldClose()) {
+        // mouse interaction with the blank
+        Vector2 mousePosition = GetMousePosition();
+        int select_row, select_col;
+        if (mousePosition.x >= grid_center.x && mousePosition.x <= grid_center.x + (9 * TITLE_SIZE) && mousePosition.y >= grid_center.y && mousePosition.y <= grid_center.y + (9 * TITLE_SIZE)) {
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                int mouse_col = (mousePosition.x - grid_center.x) / TITLE_SIZE;
+                int mouse_row = (mousePosition.y - grid_center.y) / TITLE_SIZE;
+                if (grid[mouse_row][mouse_col] == 0) {
+                    select_row = mouse_col;
+                    select_col = mouse_row;
+                }
+            }
+        }
+
+        // keyboard interaction with the blank 
+        int keypress = GetKeyPressed();
+        if (keypress >= KEY_ONE && keypress <= KEY_NINE) {
+            if (select_row != -1 && select_col != -1) {
+                fill_blank(select_col, select_row, keypress);
+            }
+        }
+
+        
         BeginDrawing();
             ClearBackground(RAYWHITE);
+            // just center the grid and make a board 
             for (int x = 0; x < MAX_NUMS; x++) {
                 for (int y = 0; y < MAX_NUMS; y++) {
                     int box_row = (int)x / 3;
@@ -82,12 +115,17 @@ int main(void) {
                     DrawText( TextFormat(" %d ", grid[x][y]), grid_center.x + (y * TITLE_SIZE), grid_center.y + (x * TITLE_SIZE), 25, RED);
                 }
             }
-            
+
+            // drawing of boaders and the interaction with the mouse
             for (int x = 0; x < MAX_NUMS; x++) {
                 for (int y = 0; y < MAX_NUMS; y++) {
-                    DrawRectangleLines(grid_center.x + (x * TITLE_SIZE), grid_center.y + (y * TITLE_SIZE), TITLE_SIZE, TITLE_SIZE, BLACK);
+                    if (x == select_row && y == select_col) 
+                        DrawRectangleLines(grid_center.x + (x * TITLE_SIZE), grid_center.y + (y * TITLE_SIZE), TITLE_SIZE, TITLE_SIZE, WHITE);
+                    else 
+                        DrawRectangleLines(grid_center.x + (x * TITLE_SIZE), grid_center.y + (y * TITLE_SIZE), TITLE_SIZE, TITLE_SIZE, BLACK);
                 }
             }
+
 
             
 
@@ -218,3 +256,42 @@ void create_blanks() {
     pool = NULL; 
 }
 // Note: remember to free the list also
+
+void fill_blank(int row, int col, int keypressed) {
+    unsigned short num;
+    num = keypressed - KEY_ONE + 1;
+    grid[row][col] = num;
+}
+// Bad approch you are makeing the same mistake "DON'T REPEAT THE CODE" But for now it ok!
+void create_copy_of_blank() {
+    struct CopyBlank *head = NULL;
+    struct CopyBlank *tail = NULL;
+
+    for (int i = 0; i < MAX_NUMS; i++) {
+        for (int j = 0; j < MAX_NUMS; j++) {
+            if (grid[i][j] == 0) {
+                struct CopyBlank *node = malloc(sizeof(*node));
+                if (node == NULL) {
+                    printf("memory err\n");
+                    return;
+                }
+                node->next = NULL;
+                node->i = i;
+                node->j = j;
+
+                if (head == NULL) {
+                    head = node;
+                    tail = node;
+                } else {
+                    tail->next = node;
+                    tail = node;
+                }
+            }
+        }
+    }
+
+    while (head != NULL){
+        printf(" %d %d\n" ,head->i, head->j);
+        head = head->next;
+    }
+} 
