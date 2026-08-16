@@ -66,7 +66,6 @@ int main(void) {
     create_copy_of_blank();
 
     // ---------------------------------------------------------------------------
-    // Cheat code
     for (int i = 0; i < MAX_NUMS; i++) {
         for (int j = 0; j < MAX_NUMS; j++) {
             printf(" %d ", grid[i][j]);
