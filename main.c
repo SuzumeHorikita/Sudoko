@@ -32,9 +32,11 @@ bool solver(int row, int column);
 bool check_row(int a_num, int row_index);
 bool check_column(int a_num, int column_index);
 bool check_3x3_grid(int a_num, int row_index, int column_index);
-void create_blanks(); // create the blanks boxes
+struct Node * create_blanks(); // create the blanks boxes and return pointer 
 void fill_blank(int row, int col, int keypressed);
-void create_copy_of_blank(); 
+bool edit_previous(struct CopyBlank *head, int row, int column);
+struct CopyBlank * create_copy_of_blank();
+bool final_end_game(struct Node *head);
 
 int main(void) {
     
@@ -62,8 +64,6 @@ int main(void) {
     // Generate of board and make a copy of it
     random_numbers_firstrow();
     bool isBoardGenerated = solver(1,0);
-    create_blanks();
-    create_copy_of_blank();
 
     // ---------------------------------------------------------------------------
     for (int i = 0; i < MAX_NUMS; i++) {
@@ -74,6 +74,10 @@ int main(void) {
     }
     printf("\n");
     // ----------------------------------------------------------------------------
+    struct Node *final_check = create_blanks();
+    struct CopyBlank *blank_position = create_copy_of_blank();
+
+  
 
     while (!WindowShouldClose()) {
         // mouse interaction with the blank
@@ -87,6 +91,10 @@ int main(void) {
                     select_row = mouse_col;
                     select_col = mouse_row;
                 }
+                if (edit_previous(blank_position, mouse_row, mouse_col)) {
+                    select_row = mouse_col;
+                    select_col = mouse_row;
+                }
             }
         }
 
@@ -97,10 +105,34 @@ int main(void) {
                 fill_blank(select_col, select_row, keypress);
             }
         }
+        
 
+        // Game over condition 
+        bool game_over = false, player_win = false;
+        if (keypress == KEY_ENTER) {
+            if (final_end_game(final_check)) {
+                game_over = true;
+                player_win = true;
+            }
+            else {
+                game_over = true;
+                player_win = false;
+            } 
+        } 
         
         BeginDrawing();
             ClearBackground(RAYWHITE);
+            // game end condition
+            if (game_over) {
+                if (player_win) {
+                    DrawRectangle(0, 0, screenWidth, screenHight, BLACK);
+                    DrawText("YOU WIN", 190, 200, 50, GREEN);
+                }
+                else {  
+                    DrawRectangle(0, 0, screenWidth, screenHight, BLACK);
+                    DrawText("YOU LOSE!", 190, 200, 50, RED);
+                }
+            } else {
             // just center the grid and make a board 
             for (int x = 0; x < MAX_NUMS; x++) {
                 for (int y = 0; y < MAX_NUMS; y++) {
@@ -124,10 +156,7 @@ int main(void) {
                         DrawRectangleLines(grid_center.x + (x * TITLE_SIZE), grid_center.y + (y * TITLE_SIZE), TITLE_SIZE, TITLE_SIZE, BLACK);
                 }
             }
-
-
-            
-
+            }
         EndDrawing();
         
     }
@@ -204,7 +233,7 @@ bool check_3x3_grid(int a_num, int row, int column) {
     return true;
 }
 
-void create_blanks() {
+struct Node * create_blanks() {
     // making a linked list to store the grid[i][j] 
     struct Node *head = NULL;
     struct Node *tail = NULL;
@@ -214,7 +243,7 @@ void create_blanks() {
             struct Node *node = malloc(sizeof(*node));
             if (node == NULL) {
                 printf("memory err\n");
-                return;
+                return NULL;
             }
             node->next = NULL;
             node->number = grid[i][j];
@@ -252,17 +281,19 @@ void create_blanks() {
 
     // freeing the pool
     free(pool);
-    pool = NULL; 
+    pool = NULL;
+
+    // return the head because to make the final condition
+    return head;
 }
 // Note: remember to free the list also
-
 void fill_blank(int row, int col, int keypressed) {
     unsigned short num;
     num = keypressed - KEY_ONE + 1;
     grid[row][col] = num;
 }
-// Bad approch you are makeing the same mistake "DON'T REPEAT THE CODE" But for now it ok!
-void create_copy_of_blank() {
+
+struct CopyBlank * create_copy_of_blank() {
     struct CopyBlank *head = NULL;
     struct CopyBlank *tail = NULL;
 
@@ -272,7 +303,7 @@ void create_copy_of_blank() {
                 struct CopyBlank *node = malloc(sizeof(*node));
                 if (node == NULL) {
                     printf("memory err\n");
-                    return;
+                    return NULL;
                 }
                 node->next = NULL;
                 node->i = i;
@@ -288,9 +319,30 @@ void create_copy_of_blank() {
             }
         }
     }
+    return head;
+} 
 
-    while (head != NULL){
-        printf(" %d %d\n" ,head->i, head->j);
+bool edit_previous(struct CopyBlank *head, int row, int column) {
+    struct CopyBlank *index = head;
+    while (index != NULL) {
+        if (index->i == row && index->j == column)
+            return true;
+        index = index->next;
+    }
+    return false;
+}
+
+bool final_end_game(struct Node *head) {
+    int i = 0 , j = 0;
+    while (head != NULL) {
+        if (head->number != grid[i][j])
+            return false;
+        j++;
+        if (j == 9) {
+            j = 0;
+            i++;
+        }
         head = head->next;
     }
-} 
+    return true;
+}
