@@ -77,7 +77,7 @@ int main(void) {
     struct Node *final_check = create_blanks();
     struct CopyBlank *blank_position = create_copy_of_blank();
 
-  
+    bool game_over = false, player_win = false;
 
     while (!WindowShouldClose()) {
         // mouse interaction with the blank
@@ -108,7 +108,6 @@ int main(void) {
         
 
         // Game over condition 
-        bool game_over = false, player_win = false;
         if (keypress == KEY_ENTER) {
             if (final_end_game(final_check)) {
                 game_over = true;
@@ -333,16 +332,30 @@ bool edit_previous(struct CopyBlank *head, int row, int column) {
 }
 
 bool final_end_game(struct Node *head) {
+    struct Node *ptr = head;
     int i = 0 , j = 0;
-    while (head != NULL) {
-        if (head->number != grid[i][j])
+    while (ptr != NULL) {
+        if (ptr->number != grid[i][j]) {
+            while (head != NULL) {
+                ptr = head;
+                head = head->next;
+                free(ptr);
+            }
             return false;
+        }
         j++;
         if (j == 9) {
             j = 0;
             i++;
         }
+        ptr = ptr->next;
+    }
+
+    // when you win it get freed
+    while (head != NULL) {
+        ptr = head;
         head = head->next;
+        free(ptr);
     }
     return true;
 }
