@@ -7,7 +7,6 @@
 #include <time.h>
 #include <stdbool.h>
 
-// gcc main.c -o game -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
  struct Node {
      int number;
      struct Node *next;
@@ -65,15 +64,6 @@ int main(void) {
     random_numbers_firstrow();
     bool isBoardGenerated = solver(1,0);
 
-    // ---------------------------------------------------------------------------
-    for (int i = 0; i < MAX_NUMS; i++) {
-        for (int j = 0; j < MAX_NUMS; j++) {
-            printf(" %d ", grid[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-    // ----------------------------------------------------------------------------
     struct Node *final_check = create_blanks();
     struct CopyBlank *blank_position = create_copy_of_blank();
 
