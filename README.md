@@ -7,8 +7,9 @@ Sudoko is a very basic [Sudoku](https://en.wikipedia.org/wiki/Sudoku) like game 
  - Point the mouse to a blank cell
  - Enter a number from 1-9 in the keyboard
  - Press ENTER when you have completed the board (the grid)
-    > [!NOTE]
-    > You can press ENTER Key whenever you want it just show "YOU WIN" or "YOU LOSE" 
+  > [!NOTE]
+  > You can press ENTER Key whenever you want it just show "YOU WIN" or "YOU LOSE"
+  
  - Last but not the least to exit the game press ESC 
 
 ## How to compile it
