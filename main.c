@@ -160,6 +160,13 @@ int main(void) {
         
     }
     CloseWindow();
+
+    struct CopyBlank *ptr = blank_position;
+    while (blank_position != NULL) {
+        ptr = blank_position;
+        blank_position = blank_position->next;
+        free(ptr); 
+    }
     
     return 0;
 }
@@ -334,12 +341,13 @@ bool edit_previous(struct CopyBlank *head, int row, int column) {
 bool final_end_game(struct Node *head) {
     struct Node *ptr = head;
     int i = 0 , j = 0;
-    while (ptr != NULL) {
-        if (ptr->number != grid[i][j]) {
+    while (head != NULL) {
+        ptr = head;
+        if (head->number != grid[i][j]) {
             while (head != NULL) {
-                ptr = head;
                 head = head->next;
                 free(ptr);
+                ptr = head;
             }
             return false;
         }
@@ -348,12 +356,6 @@ bool final_end_game(struct Node *head) {
             j = 0;
             i++;
         }
-        ptr = ptr->next;
-    }
-
-    // when you win it get freed
-    while (head != NULL) {
-        ptr = head;
         head = head->next;
         free(ptr);
     }
