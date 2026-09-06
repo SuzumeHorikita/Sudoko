@@ -30,3 +30,7 @@ clang main.c -o game.out -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 For [Windows](https://en.wikipedia.org/wiki/Microsoft_Windows), [macOS](https://en.wikipedia.org/wiki/MacOS), [BSD](https://en.wikipedia.org/wiki/Berkeley_Software_Distribution) and others please read the [raylib installation guide](https://www.raylib.com/#supported-platforms)
 
 ### Support
+XMR
+```
+45ufkQ9VutMhbeUpn2EeAiStcmpXRrkBJY4EvZh7R9VaWCXoyf8U3BSbhfRWy9rv4wd7ejNwGpgr4Q52GwibEkAGGj5RGh3
+```
